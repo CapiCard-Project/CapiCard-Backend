@@ -23,6 +23,7 @@ class CapibaraCard extends Model
         'name',
         'description',
         'image',
+        'state',
         'rarity'
     ];
 }

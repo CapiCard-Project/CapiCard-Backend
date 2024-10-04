@@ -5,12 +5,17 @@ use Illuminate\Http\Request;
 // persolanizar la validacion de la peticion
 use App\Http\Requests\CreateUserRequest;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\LoginUserRequest;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController
 {
+    /**
+     * Crear un nuevo usuario
+     * @param CreateUserRequest $request
+     */
     public function create_user(CreateUserRequest $request)
     {
         $user = User::create([
@@ -29,7 +34,11 @@ class AuthController
         ], 201);
 
     }
-    
+
+    /**
+     * Login de usuario
+     * @param LoginUserRequest $request
+     */
     public function login(LoginUserRequest $request)
     {
         if(!Auth::attempt($request->only('email', 'password'))){
@@ -48,21 +57,18 @@ class AuthController
     }
 
     /**
-     * Obtener e ususario autenticado
+     * actualizar coints de usuario
      */
-    public function user() 
+    public function update_coins(Request $request)
     {
         $user = Auth::user();
+        $user->capipoins = $request->input('capiPoints');
+        $user->save();
 
-        if(empty($user)){
-            return response()->json([
-                'message' => 'User not found'
-            ], 404);
-        }else {
-            return response()->json([
-                'status' => 200,
-                'user' => $user
-            ]); 
-        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Coins updated successfully',
+            'user' => $user
+        ]);
     }
 }
