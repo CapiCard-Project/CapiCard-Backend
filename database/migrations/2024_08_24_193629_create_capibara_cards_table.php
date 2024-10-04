@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nameCard', 255);
             $table->string('description', 255);
             $table->string('image');
+            $table->boolean('state');
             //solo acepta numeros enteros positivos
             $table->unsignedInteger('rarity'); // 0: common, 1: rare, 2: epic, 3: legendary 
         });
