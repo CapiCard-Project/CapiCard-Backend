@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CapibaraCard;
+use App\Models\Cards_By_Users;
+use Illuminate\Support\Facades\Auth;
 
 use function Laravel\Prompts\error;
 
@@ -99,6 +101,35 @@ class CapiController
             'card' => $sorteo->random()
         ]);
     }
+
+    /**
+     * Guardar una carta de capibara
+     * @param Request $request
+     */
+    public function saveCardByUser(Request $request)
+    {
+        $user = Auth::user();
+        $cardId = $request->input('card_id');
+
+        if ($cardId === null) {
+            return response()->json([
+                'message' => 'El id de la carta es requerido'
+            ], 400);
+        };
+
+        $card = new Cards_By_Users;
+
+        //insertar la carta en la base de datos
+        $card->user_id = $user->id;
+        $card->card_id = $request->input('card_id');
+        $card->save();
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Carta guardada'
+        ]);
+    }
+
 
 
 }
