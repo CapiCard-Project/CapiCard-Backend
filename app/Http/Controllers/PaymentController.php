@@ -93,9 +93,12 @@ class PaymentController
             ])->post('https://api.mercadopago.com/v1/payments', $paymntData);
 
             if ($response->successful()) {
-                Log::info($response->json());
+                return response()->json($response->json());
             }else {
-                Log::info($response->json());
+                return response()->json([
+                    'message' => 'Error al registrar el pago con PSE',
+                    'error' => $response->json()
+                ], 500);
             }
 
         } catch (\Exception $e) {
