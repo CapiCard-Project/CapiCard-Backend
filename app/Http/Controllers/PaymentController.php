@@ -82,8 +82,8 @@ class PaymentController
                 'additional_info' => [
                         'ip_address' => request()->ip()
                 ],
-                "callback_url" => 'http://localhost:5173/login',
-                "notification_url" => 'http://localhost:82/api/webHookMercadoPago'
+                "callback_url" => 'https://api.capi.shop/api/webHookMercadoPago',
+                "notification_url" => 'https://api.capi.shop/api/webHookMercadoPago'
             ];
 
             $response = Http::withHeaders([
