@@ -82,7 +82,7 @@ class PaymentController
                 'additional_info' => [
                         'ip_address' => request()->ip()
                 ],
-                "callback_url" => 'https://api.capi.shop/api/webHookMercadoPago',
+                "callback_url" => 'https://capi.shop/statusPayment',
                 "notification_url" => 'https://api.capi.shop/api/webHookMercadoPago'
             ];
 

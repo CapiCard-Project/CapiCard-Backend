@@ -28,8 +28,6 @@ class AuthController
         return response()->json([
             'status' => 201,
             'messasge' => 'User created successfully',
-            'user' => $user,
-            'token' => $user->createToken('token')->plainTextToken
 
         ], 201);
 
