@@ -117,6 +117,6 @@ class PaymentController
     public function webHookMercadoPago(Request $request)
     {
         $data = $request->all();
-        Log::info('webHookMercadoPago: ' . json_encode($data));
+        Log::info('Webhook data: ' . print_r($data, true));
     }
 }
