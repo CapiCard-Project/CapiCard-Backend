@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class CapibaraCard extends Model
 {
@@ -26,4 +27,9 @@ class CapibaraCard extends Model
         'state',
         'rarity'
     ];
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'cards_user', 'card_id', 'user_id');  
+    }
 }

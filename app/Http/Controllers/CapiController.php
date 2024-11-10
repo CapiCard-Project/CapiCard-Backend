@@ -130,6 +130,30 @@ class CapiController
         ]);
     }
 
+    /**
+     * Obtener todas las cartas del usuario
+     */
+    public function getCardsByUser()
+    {
+        // obtenemos el usuario autenticado
+        $user = Auth::user();
+
+        //validar usuario
+        if ($user == null) {
+            return response()->json([
+                'message' => 'Usuario no encontrado'
+            ], 404);
+        }
+
+        // obtenemos las cartas del usuario
+        $userCards = $user->cards;
+
+        return response()->json([
+            'status' => 200,
+            'cards' => $userCards
+        ]);
+    }
+
 
 
 }

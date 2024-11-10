@@ -20,11 +20,8 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-    Route::get('/capibara-card', [CapiController::class, 'getCapibaraCard']);
     //ruta de usuario
-    Route::post('/capiOpenPack', [CapiController::class, 'OpenPack']);
     Route::put('/update-coins', [AuthController::class, 'update_coins']);
-    Route::post('/save-card', [CapiController::class, 'saveCard']);
 
     //rutas de pago
     Route::get('/bankList', [PaymentController::class, 'bankList']);
@@ -32,6 +29,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //rutas para el manejo de cartas
     Route::post('/saveCardByUser', [CapiController::class, 'saveCardByUser']);
+    Route::post('/capiOpenPack', [CapiController::class, 'OpenPack']);
+    Route::get('/capibara-card', [CapiController::class, 'getCapibaraCard']);
+    Route::get('/cardsByUser', [CapiController::class, 'getCardsByUser']);
 
 });
 
