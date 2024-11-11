@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TransactionsDetails;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -117,16 +118,40 @@ class PaymentController
     public function webHookMercadoPago(Request $request)
     {
         $data = $request->all();
-        if (isset($data['action']) && $data['action'] == 'payment.updated') {
-            $paymentId = $data['data']['id'];
+        try {
 
-            // Consultar el estado del pago en la api de mercado pago
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer '. env('MERCADO_PAGO_ACCESS_TOKEN'),
-                'Content-Type' => 'application/json'
-            ])->get('https://api.mercadopago.com/v1/payments/' . $paymentId);
+            if (isset($data['action']) && $data['action'] == 'payment.updated') {
+                $paymentId = $data['data']['id'];
+    
+                // Consultar el estado del pago en la api de mercado pago
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer '. env('MERCADO_PAGO_ACCESS_TOKEN'),
+                    'Content-Type' => 'application/json'
+                ])->get('https://api.mercadopago.com/v1/payments/' . $paymentId);
+    
+                $status = $response->json()['status'];
+                $amount = $response->json()['transaction_amount'];
+                $type_payment = $response->json()['payment_method_id'];
+    
+                // Guardar el estado del pago en la base de datos
+                $transaction = new TransactionsDetails;
+                $transaction->transaction_id = $paymentId;
+                $transaction->status = $status;
+                $transaction->amount = $amount;
+                $transaction->type_payment = $type_payment;
+                $transaction->save();
+    
+                return response()->json([
+                    'message' => 'Webhook recibido'
+                ]); 
+            }
 
-            Log::info('Respuesta del webhook de mercado pago: ' . print_r($response, true));
+        } catch (\Exception $e) {
+            Log::error('Error en el webhook de mercado pago: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Error en el webhook de mercado pago',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }
