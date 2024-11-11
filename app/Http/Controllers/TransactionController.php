@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\TransacionsByUser;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController
 {
@@ -30,11 +31,13 @@ class TransactionController
                 'errors' => $validated->errors()
             ], 400);
         }
+        Log::info('transaction_id: ' . $request->input('transaction_id'));
 
         $transaction_id = $request->input('transaction_id');
 
         // obtener la informacion de la transaccion
-        $transaction = TransactionsDetails::find($transaction_id);
+        $transaction = TransactionsDetails::where(
+            'transaction_id', $transaction_id)->get()->first();
 
         // relacionamos la transaccion con el usuario
         $transaction_by_user = new TransacionsByUser;
