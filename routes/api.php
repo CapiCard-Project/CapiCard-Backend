@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Models\CapibaraCard;
 use Faker\Provider\ar_EG\Payment;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TransactionController;
 
 //rutas para la autenticacion de usuarios
 Route::post('/register', [AuthController::class, 'create_user']);
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //rutas de pago
     Route::get('/bankList', [PaymentController::class, 'bankList']);
     Route::post('/createPayment', [PaymentController::class, 'createPayment']);
+    Route::post('/saveTransactionByUser', [TransactionController::class, 'saveTransactionByUser']);
 
     //rutas para el manejo de cartas
     Route::post('/saveCardByUser', [CapiController::class, 'saveCardByUser']);
