@@ -117,6 +117,16 @@ class PaymentController
     public function webHookMercadoPago(Request $request)
     {
         $data = $request->all();
-        Log::info('Webhook data: ' . print_r($data, true));
+        if (isset($data['action']) && $data['action'] == 'payment.updated') {
+            $paymentId = $data['data']['id'];
+
+            // Consultar el estado del pago en la api de mercado pago
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer '. env('MERCADO_PAGO_ACCESS_TOKEN'),
+                'Content-Type' => 'application/json'
+            ])->get('https://api.mercadopago.com/v1/payments/' . $paymentId);
+
+            Log::info('Respuesta del webhook de mercado pago: ' . print_r($response, true));
+        }
     }
 }
