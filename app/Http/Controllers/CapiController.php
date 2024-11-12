@@ -117,12 +117,25 @@ class CapiController
             ], 400);
         };
 
-        $card = new Cards_By_Users;
+        // validar si la carta ya fue guardada
+        $cardSaved = Cards_By_Users::where('user_id', $user->id)
+            ->where('card_id', $cardId)
+            ->first();
 
-        //insertar la carta en la base de datos
-        $card->user_id = $user->id;
-        $card->card_id = $request->input('card_id');
-        $card->save();
+        if ($cardSaved != null) {
+            $cardSaved->quantity = $cardSaved->quantity + 1;
+            $cardSaved->save();
+
+        } else {
+
+            $card = new Cards_By_Users;
+
+            //insertar la carta en la base de datos
+            $card->user_id = $user->id;
+            $card->card_id = $request->input('card_id');
+            $card->save();
+
+        }
 
         return response()->json([
             'status' => 200,
